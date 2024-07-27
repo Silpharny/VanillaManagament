@@ -1,36 +1,113 @@
 import { useState } from "react"
-import { Container, Text } from "./styles"
-import { auth, db } from "../../services/firebaseConfig"
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth"
+import {
+  Container,
+  InputView,
+  Input,
+  Button,
+  ButtonTitle,
+  Change,
+  ChangeText,
+} from "./styles"
+
+import Logo from "../../components/Logo"
+
+import { FontAwesome } from "@expo/vector-icons"
 
 export default function Login() {
-  const [isRegister, setIsRegister] = useState(false)
+  const [isLogin, setIsLogin] = useState(true)
+
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  function ChangeScreen() {
+    setIsLogin(!isLogin)
+  }
+
+  function handleLogin() {
+    if (email === "" || password === "") {
+      alert("Preencha todos os campos")
+      return
+    }
+
+    console.log(email, password)
+  }
 
   function handleRegister() {
-    const newAuth = auth
-    const provider = new GoogleAuthProvider()
-    signInWithPopup(newAuth, provider).then((result) => {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = GoogleAuthProvider.credentialFromResult(result)
-      const token = credential.accessToken
-      // The signed-in user info.
-      const user = result.user
-      // IdP data available using getAdditionalUserInfo(result)
-      // ...
-    })
+    if (name === "" || email === "" || password === "") {
+      alert("Preencha todos os campos")
+      return
+    }
+
+    console.log(name, email, password)
   }
 
-  if (isRegister) {
+  if (isLogin) {
     return (
       <Container>
-        <Text>Register</Text>
-      </Container>
-    )
-  } else {
-    return (
-      <Container>
-        <Text>Login</Text>
+        <Logo />
+        <InputView>
+          <Input
+            placeholder="Digite seu email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+          />
+          <FontAwesome
+            name="envelope"
+            size={24}
+            color="  rgba(00, 00, 00, 0.7)"
+          />
+        </InputView>
+        <InputView>
+          <Input
+            placeholder="Digite sua senha"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+          />
+          <FontAwesome name="lock" size={24} color="rgba(00, 00, 00, 0.7)" />
+        </InputView>
+        <Button onPress={handleLogin}>
+          <ButtonTitle>Entrar</ButtonTitle>
+        </Button>
+        <Change onPress={ChangeScreen}>
+          <ChangeText>Criar conta</ChangeText>
+        </Change>
       </Container>
     )
   }
+  return (
+    <Container>
+      <Logo />
+      <InputView>
+        <Input
+          placeholder="Digite seu nome..."
+          value={name}
+          onChangeText={(text) => setName(text)}
+        />
+        <FontAwesome name="user" size={24} color="rgba(00, 00, 00, 0.7)" />
+      </InputView>
+      <InputView>
+        <Input
+          placeholder="Digite seu email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+        />
+        <FontAwesome name="envelope" size={24} color="rgba(00, 00, 00, 0.7)" />
+      </InputView>
+      <InputView>
+        <Input
+          placeholder="Digite sua senha"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+        />
+        <FontAwesome name="lock" size={24} color="rgba(00, 00, 00, 0.7)" />
+      </InputView>
+      <Button onPress={handleRegister}>
+        <ButtonTitle>Criar Conta</ButtonTitle>
+      </Button>
+      <Change onPress={ChangeScreen}>
+        <ChangeText>Entrar</ChangeText>
+      </Change>
+    </Container>
+  )
 }
