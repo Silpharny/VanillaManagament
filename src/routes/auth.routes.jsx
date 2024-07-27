@@ -1,11 +1,12 @@
-import Login from "../screens/Login"
-
 import { createStackNavigator } from "@react-navigation/stack"
+import Login from "../screens/Login"
 
 const Stack = createStackNavigator()
 
 export default function AuthRoutes() {
-  ;<Stack.Navigator>
-    <Stack.Screen name="login" component={Login} />
-  </Stack.Navigator>
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="login" component={Login} />
+    </Stack.Navigator>
+  )
 }
