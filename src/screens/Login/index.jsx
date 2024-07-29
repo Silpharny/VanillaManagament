@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import {
   Container,
   InputView,
@@ -13,12 +13,16 @@ import Logo from "../../components/Logo"
 
 import { FontAwesome } from "@expo/vector-icons"
 
+import { AuthContext } from "../../contexts/auth"
+
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true)
 
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+
+  const { createUser, signIn } = useContext(AuthContext)
 
   function ChangeScreen() {
     setIsLogin(!isLogin)
@@ -30,7 +34,7 @@ export default function Login() {
       return
     }
 
-    console.log(email, password)
+    signIn(email, password)
   }
 
   function handleRegister() {
@@ -39,7 +43,7 @@ export default function Login() {
       return
     }
 
-    console.log(name, email, password)
+    createUser(name, email, password)
   }
 
   if (isLogin) {
@@ -49,6 +53,9 @@ export default function Login() {
         <InputView>
           <Input
             placeholder="Digite seu email"
+            textContentType="emailAddress"
+            keyboardType="email-address"
+            autoCapitalize="none"
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
@@ -61,6 +68,8 @@ export default function Login() {
         <InputView>
           <Input
             placeholder="Digite sua senha"
+            textContentType="password"
+            secureTextEntry={true}
             value={password}
             onChangeText={(text) => setPassword(text)}
           />
@@ -89,6 +98,9 @@ export default function Login() {
       <InputView>
         <Input
           placeholder="Digite seu email"
+          textContentType="emailAddress"
+          keyboardType="email-address"
+          autoCapitalize="none"
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
@@ -97,6 +109,8 @@ export default function Login() {
       <InputView>
         <Input
           placeholder="Digite sua senha"
+          textContentType="password"
+          secureTextEntry={true}
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
