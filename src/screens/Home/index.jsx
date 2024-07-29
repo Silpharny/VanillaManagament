@@ -1,9 +1,10 @@
-import { Container, Text } from "./styles"
+import { useContext } from "react"
+import { AuthContext } from "../../contexts/auth"
+import IsAdmin from "./IsAdmin"
+import IsNotAdmin from "./IsNotAdmin"
 
 export default function Home() {
-  return (
-    <Container>
-      <Text>Home</Text>
-    </Container>
-  )
+  const { user } = useContext(AuthContext)
+
+  return user.isAdmin ? <IsAdmin /> : <IsNotAdmin />
 }
