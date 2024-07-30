@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import {
   Body,
   Button,
@@ -12,9 +12,20 @@ import Header from "../../../components/Header"
 import { FontAwesome6 } from "@expo/vector-icons"
 import { Picker } from "@react-native-picker/picker"
 
-import { collection, doc, setDoc } from "firebase/firestore"
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore"
 import { db } from "../../../services/firebaseConfig"
-import { useNavigation } from "@react-navigation/native"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
+
+import { format } from "date-fns"
 
 export default function Edit({ route }) {
   const { product } = route.params
@@ -24,9 +35,67 @@ export default function Edit({ route }) {
 
   const [selectedStatus, setSelectedStatus] = useState()
 
-  useState(() => {
-    return () => {}
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      async function getTotal() {
+        const q = query(
+          collection(db, "inventory"),
+          where("ProductUid", "==", product.id)
+        )
+
+        const querySnapshot = await getDocs(q)
+
+        updateModels(querySnapshot)
+      }
+      getTotal()
+
+      async function updateModels(querySnapshot) {
+        const desData = []
+        const corData = []
+        const finData = []
+
+        querySnapshot.forEach((doc) => {
+          if (doc.data().status === "Desmontado") {
+            desData.push(doc.data())
+          }
+
+          if (doc.data().status === "Cortado na oficina") {
+            corData.push(doc.data())
+          }
+
+          if (doc.data().status === "Finalizado") {
+            finData.push(doc.data())
+          }
+        })
+
+        const totalDes = desData.reduce((acc, item) => {
+          return acc + item.amount
+        }, 0)
+
+        const totalCor = corData.reduce((acc, item) => {
+          return acc + item.amount
+        }, 0)
+
+        const totalFin = finData.reduce((acc, item) => {
+          return acc + item.amount
+        }, 0)
+
+        constModelRef = doc(db, "models", product.uid)
+
+        await updateDoc(constModelRef, {
+          desmontado: totalDes,
+          cortadoOficina: totalCor,
+          finalizado: totalFin,
+          total: totalDes + totalCor + totalFin,
+          timestamp: serverTimestamp(),
+        })
+      }
+
+      return () => {
+        getTotal()
+      }
+    }, [])
+  )
 
   async function entrance() {
     if (!amount || !selectedStatus) {
@@ -44,6 +113,8 @@ export default function Edit({ route }) {
       name: product.name,
       amount: amountInt,
       status: selectedStatus,
+      createAt: new Date(),
+      date: format(new Date(), "MM/dd/yyyy"),
     }).then(() => {
       navigation.goBack()
       setAmount("")
@@ -66,6 +137,8 @@ export default function Edit({ route }) {
       name: product.name,
       amount: amountInt,
       status: selectedStatus,
+      createAt: new Date(),
+      date: format(new Date(), "dd/MM/yyyy"),
     }).then(() => {
       navigation.goBack()
       setAmount("")

@@ -7,13 +7,25 @@ export const Container = styled.View`
   background-color: #fff;
 `
 
-export const DetailsView = styled.View`
-  align-items: center;
-
-  justify-content: center;
+export const DetailList = styled.FlatList`
   margin-top: 40px;
   padding: 0 22px;
   width: 100%;
+`
+
+export const DetailsView = styled.View`
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px;
+  width: 100%;
+`
+
+export const DetailsHistory = styled.View`
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px;
+  width: 100%;
+  margin-top: 50px;
 `
 
 export const Info = styled.View`
@@ -39,10 +51,8 @@ export const Tag = styled.Text`
   color: #000;
   font-weight: 500;
   align-self: flex-start;
+  margin-left: 12px;
   margin-bottom: 10px;
-  margin-left: 16px;
 `
 
-export const HistoricalList = styled.FlatList`
-  margin-top: 20px;
-`
+export const HistoricalList = styled.FlatList``

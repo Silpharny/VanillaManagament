@@ -1,17 +1,33 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Header from "../../../components/Header"
-import SearchBar from "../../../components/SearchBar"
-import { Body, Container, ProductList, Tag, Text, Total } from "./styles"
+
+import {
+  Body,
+  Container,
+  ContainerInformation,
+  List,
+  ProductList,
+  SearchArea,
+  SearchInput,
+  Tag,
+  Text,
+  Total,
+} from "./styles"
 import {
   collection,
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   where,
 } from "firebase/firestore"
 import { db } from "../../../services/firebaseConfig"
 import AllProducts from "../../../components/AllProducts"
+import Loading from "../../../components/Loading"
+import { useFocusEffect } from "@react-navigation/native"
+import { FontAwesome6 } from "@expo/vector-icons"
+import SearchList from "../../../components/SearchList"
 
 export default function Products({ route }) {
   const { CollectionId, CollectionName } = route.params
@@ -20,61 +36,139 @@ export default function Products({ route }) {
 
   const [allInventory, setAllInventory] = useState([])
 
+  const [amountTotal, setAmountTotal] = useState(0)
+
+  const [loading, setLoading] = useState(true)
+
+  const [input, setInput] = useState("")
+  const [models, setModels] = useState([])
+
+  useFocusEffect(
+    useCallback(() => {
+      async function getModels() {
+        const q = query(
+          collection(db, "models"),
+          where("collection", "==", CollectionId)
+        )
+
+        const querySnapshot = await getDocs(q)
+
+        const modelList = []
+        querySnapshot.forEach((doc) => {
+          modelList.push({ ...doc.data(), id: doc.id })
+        })
+
+        setAllModels(modelList)
+      }
+
+      async function getHistorical() {
+        const q = query(
+          collection(db, "inventory"),
+          where("collection", "==", CollectionId)
+        )
+
+        const querySnapshot = await getDocs(q)
+
+        const data = []
+        querySnapshot.forEach((doc) => {
+          data.push(doc.data())
+        })
+
+        setAllInventory(data)
+        amountTotal(data)
+        getModels()
+        setLoading(false)
+      }
+
+      function amountTotal(list) {
+        let totalProduct = []
+        list.map((item) => {
+          totalProduct.push(item.amount)
+        })
+
+        totalProduct = totalProduct.reduce((acc, item) => {
+          return acc + item
+        }, 0)
+        setAmountTotal(totalProduct)
+      }
+
+      getHistorical()
+
+      return () => {}
+    }, [])
+  )
+
   useEffect(() => {
-    async function getModels() {
-      const q = query(
-        collection(db, "models"),
-        where("collection", "==", CollectionId)
-      )
-
-      const querySnapshot = await getDocs(q)
-
-      const modelList = []
-      querySnapshot.forEach((doc) => {
-        modelList.push({ ...doc.data(), id: doc.id })
-      })
-
-      setAllModels(modelList)
-    }
-    getModels()
-
-    async function getHistorical() {
-      const q = query(
-        collection(db, "inventory"),
-        where("collection", "==", CollectionId)
-      )
-
-      const querySnapshot = await getDocs(q)
-
-      const data = []
-      querySnapshot.forEach((doc) => {
-        data.push(doc.data())
-      })
-
-      setAllInventory(data)
+    if (input === "" || input === undefined) {
+      setModels([])
+      return
     }
 
-    getHistorical()
+    function subscriber() {
+      const docRef = collection(db, "models")
+      const queryModel = query(
+        docRef,
+        where("tag", ">=", input),
+        where("tag", ">=", input + "\uf8ff")
+      )
 
-    return () => {}
-  }, [])
+      onSnapshot(queryModel, (snapShot) => {
+        const modelList = []
+        snapShot.forEach((doc) => {
+          modelList.push({
+            ...doc.data(),
+            id: doc.id,
+          })
+          setModels(modelList)
+        })
+      })
+    }
+
+    return () => subscriber()
+  }, [input])
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <Container>
       <Header title={CollectionName} />
-      <SearchBar />
-      <Total>
-        <Text>Total em estoque</Text>
-        <Text>{allInventory.length}</Text>
-      </Total>
-      <Body>
-        <Tag>Todos os modelos</Tag>
-        <ProductList
-          data={allModels}
-          keyExtractor={(item) => item.uid}
-          renderItem={({ item }) => <AllProducts product={item} />}
+      <SearchArea>
+        <FontAwesome6
+          name="magnifying-glass"
+          size={18}
+          color=" rgba(9, 9, 11, 0.5)"
         />
-      </Body>
+        <SearchInput
+          placeholder="Pesquisar"
+          value={input}
+          onChangeText={(text) => setInput(text)}
+        />
+      </SearchArea>
+      {input.length > 2 && (
+        <List
+          data={models}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            return <SearchList data={item} />
+          }}
+        />
+      )}
+      <ContainerInformation>
+        <Total>
+          <Text>Total em estoque</Text>
+          <Text>{amountTotal}</Text>
+        </Total>
+        <Body>
+          <Tag>Todos os modelos</Tag>
+          <ProductList
+            data={allModels}
+            keyExtractor={(item) => item.uid}
+            renderItem={({ item }) => <AllProducts product={item} />}
+          />
+        </Body>
+      </ContainerInformation>
     </Container>
   )
 }
