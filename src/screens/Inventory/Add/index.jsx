@@ -34,6 +34,10 @@ export default function Add({ route }) {
       name: modelName,
       tag: tag,
       collection: selectedCollection,
+      cortadoOficina: 0,
+      desmontado: 0,
+      finalizado: 0,
+      total: 0,
     }).then(() => {
       setModelName("")
       setTag("")

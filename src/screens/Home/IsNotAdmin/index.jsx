@@ -1,9 +1,13 @@
 import { useNavigation } from "@react-navigation/native"
-import { Button, Container, TextButton } from "./styles"
+import { Button, ButtonView, Container, TextButton } from "./styles"
 import { FontAwesome } from "@expo/vector-icons"
+import { useContext } from "react"
+import { AuthContext } from "../../../contexts/auth"
 
 export default function IsNotAdmin() {
   const navigation = useNavigation()
+
+  const { signOutUser } = useContext(AuthContext)
 
   return (
     <Container>
@@ -24,6 +28,13 @@ export default function IsNotAdmin() {
         <TextButton>Estoque</TextButton>
         <FontAwesome name="archive" size={24} color="#fff" />
       </Button>
+
+      <ButtonView>
+        <Button onPress={signOutUser}>
+          <TextButton>Sair da conta</TextButton>
+          <FontAwesome name="sign-out" size={24} color="#fff" />
+        </Button>
+      </ButtonView>
     </Container>
   )
 }

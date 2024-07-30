@@ -23,3 +23,6 @@ export const TextButton = styled.Text`
   color: #fff;
   font-weight: bold;
 `
+export const ButtonView = styled.View`
+  margin-top: 50px;
+`
