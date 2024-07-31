@@ -15,11 +15,11 @@ export default function IsNotAdmin() {
         <TextButton>Ponto</TextButton>
         <FontAwesome name="clock-o" size={24} color="#fff" />
       </Button>
-      <Button>
+      <Button onPress={() => navigation.navigate("warning")}>
         <TextButton>Avisos</TextButton>
         <FontAwesome name="bell-o" size={24} color="#fff" />
       </Button>
-      <Button>
+      <Button onPress={() => navigation.navigate("information")}>
         <TextButton>Informações</TextButton>
         <FontAwesome name="info" size={24} color="#fff" />
       </Button>

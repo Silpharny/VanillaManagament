@@ -10,6 +10,10 @@ import Details from "../screens/Inventory/Details"
 import Edit from "../screens/Inventory/Edit"
 import Products from "../screens/Inventory/Products"
 
+import Information from "../screens/Information"
+
+import Warning from "../screens/Warning"
+
 const Stack = createStackNavigator()
 
 export default function AppRoutes() {
@@ -22,6 +26,10 @@ export default function AppRoutes() {
       <Stack.Screen name="details" component={Details} />
       <Stack.Screen name="edit" component={Edit} />
       <Stack.Screen name="products" component={Products} />
+
+      <Stack.Screen name="information" component={Information} />
+
+      <Stack.Screen name="warning" component={Warning} />
     </Stack.Navigator>
   )
 }

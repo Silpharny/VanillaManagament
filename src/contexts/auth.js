@@ -68,7 +68,6 @@ export default function AuthProvider({ children }) {
         let user = userCredential.user
         const docRef = doc(db, "users", user.uid)
         await getDoc(docRef).then((doc) => {
-          console.log(doc.data())
           let data = {
             uid: user.uid,
             name: doc.data().name,
