@@ -8,7 +8,7 @@ import {
   Title,
 } from "./styles"
 
-export default function DescriptionModal({ data, openModal, hideModal }) {
+export default function DataViewModal({ data, openModal, hideModal }) {
   return (
     <Modal visible={openModal} transparent={true} animationType="fade">
       <Container onPress={hideModal}>

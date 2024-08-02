@@ -1,19 +1,22 @@
 import { Body, Button, Container, List, TextButton } from "./styles"
 
 import Header from "../../components/Header"
-import InfoItem from "../../components/InfoItem"
-
 import { FontAwesome6 } from "@expo/vector-icons"
-import { useCallback, useLayoutEffect, useState } from "react"
-import InfoModal from "../../components/InfoModal"
+import { useCallback, useState } from "react"
+
 import { useFocusEffect } from "@react-navigation/native"
 import { collection, getDocs, query } from "firebase/firestore"
 import { db } from "../../services/firebaseConfig"
+
+import DataItem from "../../components/DataItem"
+import AddModal from "../../components/Modal"
 
 export default function Information() {
   const [modal, setModal] = useState(false)
 
   const [data, setData] = useState([])
+
+  const information = true
 
   useFocusEffect(
     useCallback(() => {
@@ -48,9 +51,13 @@ export default function Information() {
           <FontAwesome6 name="circle-plus" size={26} color="#fff" />
           <TextButton>Adicionar</TextButton>
         </Button>
-        <List data={data} renderItem={({ item }) => <InfoItem data={item} />} />
+        <List data={data} renderItem={({ item }) => <DataItem data={item} />} />
       </Body>
-      <InfoModal modal={modal} hideModal={handleModal} />
+      <AddModal
+        information={information}
+        modal={modal}
+        hideModal={handleModal}
+      />
     </Container>
   )
 }

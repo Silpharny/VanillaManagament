@@ -8,13 +8,16 @@ import { useCallback, useState } from "react"
 import { useFocusEffect } from "@react-navigation/native"
 import { collection, getDocs, query } from "firebase/firestore"
 import { db } from "../../services/firebaseConfig"
-import WarningModal from "../../components/WarningModal"
-import WarningItem from "../../components/WarningItem"
+
+import DataItem from "../../components/DataItem"
+import AddModal from "../../components/Modal"
 
 export default function Warning() {
   const [modal, setModal] = useState(false)
 
   const [data, setData] = useState([])
+
+  const warning = true
 
   useFocusEffect(
     useCallback(() => {
@@ -49,12 +52,9 @@ export default function Warning() {
           <FontAwesome6 name="circle-plus" size={26} color="#fff" />
           <TextButton>Adicionar</TextButton>
         </Button>
-        <List
-          data={data}
-          renderItem={({ item }) => <WarningItem data={item} />}
-        />
+        <List data={data} renderItem={({ item }) => <DataItem data={item} />} />
       </Body>
-      <WarningModal modal={modal} hideModal={handleModal} />
+      <AddModal warning={warning} modal={modal} hideModal={handleModal} />
     </Container>
   )
 }

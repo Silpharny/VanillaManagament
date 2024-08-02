@@ -19,26 +19,43 @@ import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore"
 
 import { AuthContext } from "../../contexts/auth"
 
-export default function WarningModal({ modal, hideModal }) {
+export default function AddModal({ modal, hideModal, warning, information }) {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
 
   const { user } = useContext(AuthContext)
 
-  async function addWarning() {
-    if (!title || !description) return
+  if (warning) {
+    async function addWarning() {
+      if (!title || !description) return
 
-    await setDoc(doc(collection(db, "warning")), {
-      title,
-      description,
-      userId: user.uid,
-      autor: user.name,
-      created: serverTimestamp(),
-    })
-    setTitle("")
-    setDescription("")
+      await setDoc(doc(collection(db, "warning")), {
+        title,
+        description,
+        userId: user.uid,
+        autor: user.name,
+        created: serverTimestamp(),
+      })
+      setTitle("")
+      setDescription("")
+      hideModal()
+    }
+  }
 
-    hideModal()
+  if (information) {
+    async function addInformation() {
+      if (!title || !description) return
+
+      await setDoc(doc(collection(db, "information")), {
+        title,
+        description,
+        created: serverTimestamp(),
+      })
+      setTitle("")
+      setDescription("")
+
+      hideModal()
+    }
   }
 
   return (
@@ -49,7 +66,7 @@ export default function WarningModal({ modal, hideModal }) {
             <ExitButton onPress={hideModal}>
               <FontAwesome6 name="x" size={26} color="#09090B" />
             </ExitButton>
-            <Title>Aviso</Title>
+            <Title>{warning ? "Adicionar Nota" : "Adicionar Informação"}</Title>
             <Title></Title>
           </Header>
           <InputView>
@@ -68,7 +85,7 @@ export default function WarningModal({ modal, hideModal }) {
             />
           </InputView>
 
-          <Button onPress={addWarning}>
+          <Button onPress={warning ? addWarning : addInformation}>
             <ButtonText>Adicionar</ButtonText>
           </Button>
         </ContentContainer>
