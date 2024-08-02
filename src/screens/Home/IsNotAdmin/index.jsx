@@ -11,10 +11,10 @@ export default function IsNotAdmin() {
 
   return (
     <Container>
-      <Button>
+      {/*  <Button>
         <TextButton>Ponto</TextButton>
         <FontAwesome name="clock-o" size={24} color="#fff" />
-      </Button>
+      </Button> */}
       <Button onPress={() => navigation.navigate("warning")}>
         <TextButton>Avisos</TextButton>
         <FontAwesome name="bell-o" size={24} color="#fff" />

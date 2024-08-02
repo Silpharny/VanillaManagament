@@ -1,8 +1,9 @@
 import { useState } from "react"
-import DescriptionModal from "../DescriptionModal"
-import { Container, Title } from "./styles"
 
-export default function WarningItem({ data }) {
+import { Container, Title } from "./styles"
+import DataViewModal from "../DescriptionModal"
+
+export default function DataItem({ data }) {
   const [isOpen, setIsOpen] = useState(false)
 
   function modal() {
@@ -12,7 +13,7 @@ export default function WarningItem({ data }) {
   return (
     <Container onPress={modal}>
       <Title>{data.title}</Title>
-      <DescriptionModal data={data} openModal={isOpen} hideModal={modal} />
+      <DataViewModal data={data} openModal={isOpen} hideModal={modal} />
     </Container>
   )
 }

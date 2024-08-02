@@ -5,7 +5,7 @@ import { FontAwesome6 } from "@expo/vector-icons"
 import Header from "../../../components/Header"
 
 import { useFocusEffect } from "@react-navigation/native"
-import ModalCollection from "../../../components/ModalCollection"
+import AddNew from "../../../components/AddNew"
 import { collection, getDocs, query } from "firebase/firestore"
 import { db } from "../../../services/firebaseConfig"
 import AllCollections from "../../../components/AllCollections"
@@ -100,7 +100,7 @@ export default function Collection() {
       <Add onPress={() => handleModal()}>
         <FontAwesome6 name="circle-plus" size={52} color="#09090B" />
       </Add>
-      <ModalCollection
+      <AddNew
         modal={modal}
         collectionList={collectionList}
         handleModal={() => setModal(!modal)}

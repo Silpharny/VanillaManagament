@@ -3,11 +3,7 @@ import { Body, Button, Close, Container, Text } from "./styles"
 import { FontAwesome6 } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
 
-export default function ModalCollection({
-  handleModal,
-  modal,
-  collectionList,
-}) {
+export default function AddNew({ handleModal, modal, collectionList }) {
   const navigation = useNavigation()
 
   function addModel() {
