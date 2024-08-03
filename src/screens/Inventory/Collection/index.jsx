@@ -8,11 +8,14 @@ import { useFocusEffect } from "@react-navigation/native"
 import AddNew from "../../../components/AddNew"
 import { collection, getDocs, query } from "firebase/firestore"
 import { db } from "../../../services/firebaseConfig"
-import AllCollections from "../../../components/AllCollections"
+
 import Loading from "../../../components/Loading"
+import All from "../../../components/All"
 
 export default function Collection() {
   const [modal, setModal] = useState(false)
+
+  const isCollection = true
 
   const [loading, setLoading] = useState(true)
 
@@ -93,7 +96,9 @@ export default function Collection() {
             data={collectionList}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <AllCollections collections={item} />}
+            renderItem={({ item }) => (
+              <All collections={item} isCollection={isCollection} />
+            )}
           />
         )}
       </Body>

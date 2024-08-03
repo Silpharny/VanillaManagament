@@ -14,6 +14,7 @@ import Logo from "../../components/Logo"
 import { FontAwesome } from "@expo/vector-icons"
 
 import { AuthContext } from "../../contexts/auth"
+import { ActivityIndicator } from "react-native"
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true)
@@ -22,7 +23,7 @@ export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const { createUser, signIn } = useContext(AuthContext)
+  const { createUser, signIn, authLoading } = useContext(AuthContext)
 
   function ChangeScreen() {
     setIsLogin(!isLogin)
@@ -33,7 +34,6 @@ export default function Login() {
       alert("Preencha todos os campos")
       return
     }
-
     signIn(email, password)
   }
 
@@ -42,7 +42,6 @@ export default function Login() {
       alert("Preencha todos os campos")
       return
     }
-
     createUser(name, email, password)
   }
 
@@ -75,9 +74,15 @@ export default function Login() {
           />
           <FontAwesome name="lock" size={24} color="rgba(00, 00, 00, 0.7)" />
         </InputView>
-        <Button onPress={handleLogin}>
-          <ButtonTitle>Entrar</ButtonTitle>
-        </Button>
+        {authLoading ? (
+          <Button>
+            <ActivityIndicator color="#fff" />
+          </Button>
+        ) : (
+          <Button onPress={handleLogin}>
+            <ButtonTitle>Entrar</ButtonTitle>
+          </Button>
+        )}
         <Change onPress={ChangeScreen}>
           <ChangeText>Criar conta</ChangeText>
         </Change>
@@ -116,9 +121,15 @@ export default function Login() {
         />
         <FontAwesome name="lock" size={24} color="rgba(00, 00, 00, 0.7)" />
       </InputView>
-      <Button onPress={handleRegister}>
-        <ButtonTitle>Criar Conta</ButtonTitle>
-      </Button>
+      {authLoading ? (
+        <Button>
+          <ActivityIndicator color="#fff" />
+        </Button>
+      ) : (
+        <Button onPress={handleRegister}>
+          <ButtonTitle>Criar Conta</ButtonTitle>
+        </Button>
+      )}
       <Change onPress={ChangeScreen}>
         <ChangeText>Entrar</ChangeText>
       </Change>

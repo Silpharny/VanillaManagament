@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import { Container, Title } from "./styles"
-import DataViewModal from "../DescriptionModal"
+import DataView from "../DataView"
 
 export default function DataItem({ data }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -13,7 +13,8 @@ export default function DataItem({ data }) {
   return (
     <Container onPress={modal}>
       <Title>{data.title}</Title>
-      <DataViewModal data={data} openModal={isOpen} hideModal={modal} />
+      <Title>{data.from}</Title>
+      <DataView data={data} openModal={isOpen} hideModal={modal} />
     </Container>
   )
 }

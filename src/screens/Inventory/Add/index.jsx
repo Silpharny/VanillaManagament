@@ -45,56 +45,6 @@ export default function Add({ route }) {
     })
   }
 
-  if (isModel) {
-    return (
-      <Container>
-        <Header title="Adicionar Modelo" />
-        <Body>
-          <Input
-            placeholder="Nome do Modelo"
-            value={modelName}
-            onChangeText={(text) => setModelName(text)}
-          />
-          <PickerArea>
-            <Picker
-              selectedValue={selectedCollection}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedCollection(itemValue)
-              }
-            >
-              <Picker.Item
-                label={
-                  collectionList.length === 0
-                    ? "Crie uma coleção"
-                    : "Selecione uma coleção"
-                }
-                enabled={false}
-                color=" rgba(9, 9, 11, 0.5)"
-              />
-
-              {collectionList.map((collection) => (
-                <Picker.Item
-                  key={collection.id}
-                  label={collection.name}
-                  value={collection.id}
-                />
-              ))}
-            </Picker>
-          </PickerArea>
-          <Input
-            placeholder="Tag"
-            value={tag}
-            onChangeText={(text) => setTag(text)}
-          />
-
-          <Button onPress={createModel}>
-            <Text>Adicionar Modelo</Text>
-          </Button>
-        </Body>
-      </Container>
-    )
-  }
-
   const [collectionName, setCollectionName] = useState("")
 
   async function creteCollection() {
@@ -114,21 +64,65 @@ export default function Add({ route }) {
     })
   }
 
-  if (!isModel) {
-    return (
-      <Container>
-        <Header title="Adicionar Coleção" />
-        <Body>
-          <Input
-            placeholder="Nome da coleção"
-            value={collectionName}
-            onChangeText={(text) => setCollectionName(text)}
-          />
-          <Button onPress={creteCollection}>
-            <Text>Adicionar Coleção</Text>
-          </Button>
-        </Body>
-      </Container>
-    )
-  }
+  return isModel ? (
+    <Container>
+      <Header title="Adicionar Modelo" />
+      <Body>
+        <Input
+          placeholder="Nome do Modelo"
+          value={modelName}
+          onChangeText={(text) => setModelName(text)}
+        />
+        <PickerArea>
+          <Picker
+            selectedValue={selectedCollection}
+            onValueChange={(itemValue, itemIndex) =>
+              setSelectedCollection(itemValue)
+            }
+          >
+            <Picker.Item
+              label={
+                collectionList.length === 0
+                  ? "Crie uma coleção"
+                  : "Selecione uma coleção"
+              }
+              enabled={false}
+              color=" rgba(9, 9, 11, 0.5)"
+            />
+
+            {collectionList.map((collection) => (
+              <Picker.Item
+                key={collection.id}
+                label={collection.name}
+                value={collection.id}
+              />
+            ))}
+          </Picker>
+        </PickerArea>
+        <Input
+          placeholder="Tag"
+          value={tag}
+          onChangeText={(text) => setTag(text)}
+        />
+
+        <Button onPress={createModel}>
+          <Text>Adicionar Modelo</Text>
+        </Button>
+      </Body>
+    </Container>
+  ) : (
+    <Container>
+      <Header title="Adicionar Coleção" />
+      <Body>
+        <Input
+          placeholder="Nome da coleção"
+          value={collectionName}
+          onChangeText={(text) => setCollectionName(text)}
+        />
+        <Button onPress={creteCollection}>
+          <Text>Adicionar Coleção</Text>
+        </Button>
+      </Body>
+    </Container>
+  )
 }

@@ -11,7 +11,7 @@ export const ExitButton = styled.Pressable``
 
 export const ContentContainer = styled.View`
   width: 90%;
-  height: 400px;
+  height: 500px;
   background-color: #fff;
   border-radius: 16px;
   padding: 20px;
@@ -28,6 +28,13 @@ export const Header = styled.View`
   margin-top: 10px;
 `
 
+export const PickerArea = styled.View`
+  width: 330px;
+  height: 48px;
+  border-radius: 8px;
+  margin-top: 20px;
+  background-color: #e5e5e5;
+`
 export const Title = styled.Text`
   font-size: 24px;
   font-weight: bold;

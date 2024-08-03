@@ -17,6 +17,8 @@ export default function Warning() {
 
   const [data, setData] = useState([])
 
+  const [userList, setUserList] = useState([])
+
   const warning = true
 
   useFocusEffect(
@@ -32,9 +34,21 @@ export default function Warning() {
         })
 
         setData(list)
+        getUsers()
       }
 
       getData()
+
+      async function getUsers() {
+        const collections = await getDocs(collection(db, "users"))
+
+        const userData = []
+        collections.forEach((doc) => {
+          userData.push({ id: doc.data().uid, name: doc.data().name })
+        })
+
+        setUserList(userData)
+      }
 
       return () => {}
     }, [modal])
@@ -54,7 +68,12 @@ export default function Warning() {
         </Button>
         <List data={data} renderItem={({ item }) => <DataItem data={item} />} />
       </Body>
-      <AddModal warning={warning} modal={modal} hideModal={handleModal} />
+      <AddModal
+        warning={warning}
+        modal={modal}
+        hideModal={handleModal}
+        userList={userList}
+      />
     </Container>
   )
 }

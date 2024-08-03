@@ -20,7 +20,7 @@ export default function AddNew({ handleModal, modal, collectionList }) {
 
   return (
     <Modal visible={modal} animationType="fade" transparent={true}>
-      <Container>
+      <Container onPress={handleModal}>
         <Body>
           <Close onPress={handleModal}>
             <FontAwesome6 name="x" size={26} color="#09090B" />
