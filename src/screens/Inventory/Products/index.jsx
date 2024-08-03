@@ -23,14 +23,17 @@ import {
   where,
 } from "firebase/firestore"
 import { db } from "../../../services/firebaseConfig"
-import AllProducts from "../../../components/AllProducts"
+
 import Loading from "../../../components/Loading"
 import { useFocusEffect } from "@react-navigation/native"
 import { FontAwesome6 } from "@expo/vector-icons"
 import SearchList from "../../../components/SearchList"
+import All from "../../../components/All"
 
 export default function Products({ route }) {
   const { CollectionId, CollectionName } = route.params
+
+  const isProduct = true
 
   const [allModels, setAllModels] = useState([])
 
@@ -165,7 +168,9 @@ export default function Products({ route }) {
           <ProductList
             data={allModels}
             keyExtractor={(item) => item.uid}
-            renderItem={({ item }) => <AllProducts product={item} />}
+            renderItem={({ item }) => (
+              <All product={item} isProduct={isProduct} />
+            )}
           />
         </Body>
       </ContainerInformation>

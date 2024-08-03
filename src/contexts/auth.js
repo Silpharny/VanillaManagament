@@ -16,6 +16,8 @@ export default function AuthProvider({ children }) {
 
   const [loading, setLoading] = useState(true)
 
+  const [authLoading, setAuthLoading] = useState(false)
+
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -36,10 +38,12 @@ export default function AuthProvider({ children }) {
         setLoading(false)
       }
     })
+
     return unsub
   }, [])
 
   async function createUser(name, email, password) {
+    setAuthLoading(true)
     await createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user
@@ -57,14 +61,15 @@ export default function AuthProvider({ children }) {
         setUser(data)
       })
       .catch((error) => {
-        let errorMessage = error.message
-        console.log(errorMessage)
+        setAuthLoading(false)
       })
+    setAuthLoading(false)
   }
 
   async function signIn(email, password) {
-    await signInWithEmailAndPassword(auth, email, password).then(
-      async (userCredential) => {
+    setAuthLoading(true)
+    await signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
         let user = userCredential.user
         const docRef = doc(db, "users", user.uid)
         await getDoc(docRef).then((doc) => {
@@ -76,8 +81,12 @@ export default function AuthProvider({ children }) {
           }
           setUser(data)
         })
-      }
-    )
+        setAuthLoading(false)
+      })
+      .catch((error) => {
+        alert("Dados inválidos!")
+        setAuthLoading(false)
+      })
   }
 
   async function signOutUser() {
@@ -87,7 +96,15 @@ export default function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ createUser, signIn, signed: !!user, loading, user, signOutUser }}
+      value={{
+        createUser,
+        signIn,
+        signed: !!user,
+        loading,
+        user,
+        signOutUser,
+        authLoading,
+      }}
     >
       {children}
     </AuthContext.Provider>

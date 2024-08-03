@@ -8,7 +8,7 @@ import {
   Title,
 } from "./styles"
 
-export default function DataViewModal({ data, openModal, hideModal }) {
+export default function DataView({ data, openModal, hideModal }) {
   return (
     <Modal visible={openModal} transparent={true} animationType="fade">
       <Container onPress={hideModal}>
@@ -16,7 +16,7 @@ export default function DataViewModal({ data, openModal, hideModal }) {
           <Header>
             <Title>{data.title}</Title>
           </Header>
-          {data.autor && <Autor>{data.autor}</Autor>}
+          {data.to && <Autor>{data.to}</Autor>}
           <Description>{data.description}</Description>
         </ContentContainer>
       </Container>
